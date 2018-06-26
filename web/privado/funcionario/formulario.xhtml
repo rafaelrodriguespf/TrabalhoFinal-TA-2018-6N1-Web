@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:form id="formEdicao">
+        <h:panelGroup rendered="#{controleFuncionario.editando}">
+            <div class="ui-fluid">
+                <p:messages id="messages"/>
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                    layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <p:outputLabel value="Edição de Funcionarios"/>
+                    </f:facet>
+                    
+                    <p:outputLabel value="ID"/>
+                    <p:inputText value="#{controleFuncionario.objeto.id}"
+                                 size="5" readonly="true"/>
+                    
+                    <p:outputLabel value="Nome" for="txtNome"/>
+                    <p:inputText value="#{controleFuncionario.objeto.nome}"
+                                 id="txtNome" size="50" maxlength="50"/>
+                   
+                    <p:outputLabel value="Email" for="txtEmail"/>
+                    <p:inputText value="#{controleFuncionario.objeto.email}"
+                                 id="txtEmail" size="50" maxlength="50"/> 
+       
+                    <p:outputLabel value="Password" for="txtPassword"/>
+                    <p:password value="#{controleFuncionario.objeto.password}" redisplay="true"
+                                 id="txtPassword" size="20" maxlength="20"/>
+                    
+                    <p:outputLabel value="CPF" for="txtCpf"/>
+                    <p:inputText value="#{controleFuncionario.objeto.cpf}"
+                                 id="txtCpf" size="50" maxlength="50"/>
+                    
+                    <p:outputLabel value="Nascimento" for="txtNascimento"/>
+                    <p:calendar id="txtNascimento" value="#{controleFuncionario.objeto.nascimento}"
+                                mask="true" pattern="dd/MM/yyyy" navigator="true">
+                        <f:converter converterId="converterCalendar"/>
+                    </p:calendar>
+                    
+                   
+                    <p:commandButton value="Salvar"
+                                     icon="ui-icon-disk"
+                                     actionListener="#{controleFuncionario.salvar()}"
+                                     update="formEdicao :formListagem"/>
+                </p:panelGrid>
+                <h:panelGroup id="painelPrivilegio">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controleFuncionario.editandoPrivilegio}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de Privilégios do Funcionário"/>
+                        </f:facet>             
+                        <p:outputLabel value="Privilégio" for="selectPrivilegio"/>
+                        <p:selectOneMenu id="selectPrivilegio" value="#{controleFuncionario.privilegio}"
+                                         filter="true">
+                            <f:converter converterId="converterPrivilegio"/>
+                            <f:selectItem noSelectionOption="true"
+                                          itemLabel="Selecione um registro"/>
+                            <f:selectItems value="#{controleFuncionario.daoPrivilegio.listaTodos}"
+                                           var="p" itemLabel="#{p.tipo}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value=""/>
+                        <p:commandButton value="Salvar Permissão" icon="ui-icon-disk"
+                                         actionListener="#{controleFuncionario.salvarPrivilegio()}"
+                                         id="btnAdicionarPrivilegio"
+                                         process="btnAdicionarPrivilegio selectPrivilegio"
+                                         update="messages painelPrivilegio listagemPrivilegio"/>                                         
+                    </p:panelGrid>                                                            
+                </h:panelGroup>    
+            </div>
+            <h:panelGroup id="listagemPrivilegio">
+                <h:panelGroup rendered="#{!controleFuncionario.editandoPrivilegio}">
+                    <p:commandButton value="Novo Privilégio"
+                                     actionListener="#{controleFuncionario.novoPrivilegio()}"
+                                     update="listagemPrivilegio painelPrivilegio"
+                                     process="@this"/>
+                    <p:dataTable value="#{controleFuncionario.objeto.privilegios}" var="pri"
+                                 reflow="true">
+                        <f:facet name="header">
+                            <p:outputLabel value="Privilégios do Usuário"/>
+                        </f:facet>
+                        <p:column headerText="Tipo">
+                            <p:outputLabel value="#{pri.tipo}"/>
+                        </p:column>
+                        <p:column headerText="Descrição">
+                            <p:outputLabel value="#{pri.descricao}"/>
+                        </p:column>  
+                        <p:column headerText="Ações">
+                            <div align="center">
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controleFuncionario.removerPrivilegio(pri)}"
+                                                 process="@this" update="@form"/>                                                 
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:panelGroup>
+    </h:form>
+</html>
+

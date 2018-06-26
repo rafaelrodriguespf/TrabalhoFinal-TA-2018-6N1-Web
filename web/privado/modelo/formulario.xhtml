@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:form id="formEdicao">
+        <h:panelGroup rendered="#{controleModelo.editando}">
+            <div class="ui-fluid">
+                <p:messages/>
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                    layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <p:outputLabel value="Edição de Modelos"/>
+                    </f:facet>
+                    <p:outputLabel value="ID"/>
+                    <p:inputText value="#{controleModelo.objeto.id}"
+                                 size="5" readonly="true"/>
+                    <p:outputLabel value="Nome" for="txtNome"/>
+                    <p:inputText value="#{controleModelo.objeto.nome}"
+                                 id="txtNome" size="40" maxlength="40"/>
+                    
+                    <p:outputLabel value="Marca" for="selectMarca"/>
+                    
+                    <p:selectOneMenu value="#{controleModelo.objeto.marca}"
+                                     id="selectMarca" filter="true" filterMatchMode="startsWith">
+                        <f:converter converterId="converterMarca"/>
+                        <f:selectItem itemLabel="Selecione um registro"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{controleModelo.daoMarca.listaTodos}"
+                                       var="m" itemLabel="#{m.nome}"/>
+                    </p:selectOneMenu>
+
+                    <p:commandButton value="Salvar"
+                                     icon="ui-icon-disk"
+                                     actionListener="#{controleModelo.salvar()}"
+                                     update="formEdicao :formListagem"/>
+                </p:panelGrid>
+            </div>
+        </h:panelGroup>
+    </h:form>
+</html>
+

@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:form id="formEdicao">
+        <h:panelGroup rendered="#{controleAutomovel.editando}">
+            <div class="ui-fluid">
+                <p:messages id="messages"/>
+                <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                             layout="grid" styleClass="ui-panelgrid-blank">
+                    <f:facet name="header">
+                        <p:outputLabel value="Edição de Automóveis"/>
+                    </f:facet>
+
+                    <p:outputLabel value="ID"/>
+                    <p:inputText value="#{controleAutomovel.objeto.id}"
+                                 size="5" readonly="true"/>
+
+                    <p:outputLabel value="Quilometragem" for="txtQuilometragem"/>
+                    <p:inputText value="#{controleAutomovel.objeto.quilometragem}"
+                                 id="txtQuilometragem" size="50" maxlength="50"/>
+
+                    <p:outputLabel value="Valor" for="txtValor"/>
+                    <p:inputNumber value="#{controleAutomovel.objeto.valor}"
+                                   id="txtValor" placeholder="Obrigatório"
+                                   decimalSeparator="." thousandSeparator="" decimalPlaces="2"   />
+
+                    <p:outputLabel value="Motor" for="txtMotor"/>
+                    <p:inputNumber value="#{controleAutomovel.objeto.motor}"
+                                   id="txtMotor" placeholder="Obrigatório"
+                                   decimalSeparator="." thousandSeparator="" decimalPlaces="2"   />
+                    <p:outputLabel value="Descrição" for="txtDescricao"/>
+                    <p:inputTextarea id="txtDescricao" rows="10" cols="50" 
+                                     value="#{controleAutomovel.objeto.descricao}" />
+
+
+                    <p:outputLabel value="Cor" for="txtCor"/>
+                    <p:inputText value="#{controleAutomovel.objeto.cor}"
+                                 id="txtCor" size="50" maxlength="50"/> 
+
+                    <p:outputLabel value="Placa" for="txtPlaca"/>
+                    <p:inputText value="#{controleAutomovel.objeto.placa}" 
+                                 id="txtPlaca" size="8" maxlength="8"/>
+
+                    <p:outputLabel value="Portas" for="txtPortas"/>
+                    <p:inputText value="#{controleAutomovel.objeto.portas}"
+                                 id="txtPortas" size="50" maxlength="50"/>
+
+                    <p:outputLabel value="Ano/Modelo" for="txtAnoModelo"/>
+                    <p:calendar id="txtAnoModelo" value="#{controleAutomovel.objeto.anoModelo}"
+                                mask="true" pattern="dd/MM/yyyy" navigator="true">
+                        <f:converter converterId="converterCalendar"/>
+                    </p:calendar>
+
+                    <p:outputLabel value="Modelo" for="selectModelo"/>
+                    <p:selectOneMenu value="#{controleAutomovel.objeto.modelo}"
+                                     id="selectModelo" filter="true" filterMatchMode="startsWith">
+                        <f:converter converterId="converterModelo"/>
+                        <f:selectItem itemLabel="Selecione um registro"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{controleAutomovel.daoModelo.listaTodos}"
+                                       var="m" itemLabel="#{m.nome}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Combustível" for="selectCombustivel"/>
+                    <p:selectOneMenu value="#{controleAutomovel.objeto.combustivel}"
+                                     id="selectCombustivel" filter="true" filterMatchMode="startsWith">
+                        <f:converter converterId="converterCombustivel"/>
+                        <f:selectItem itemLabel="Selecione um registro"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{controleAutomovel.daoCombustivel.listaTodos}"
+                                       var="c" itemLabel="#{c.nome}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Funcionário" for="selectFuncionario"/>
+                    <p:selectOneMenu value="#{controleAutomovel.objeto.funcionario}"
+                                     id="selectFuncionario" filter="true" filterMatchMode="startsWith">
+                        <f:converter converterId="converterFuncionario"/>
+                        <f:selectItem itemLabel="Selecione um registro"
+                                      noSelectionOption="true"/>
+                        <f:selectItems value="#{controleAutomovel.daoFuncionario.listaTodos}"
+                                       var="f" itemLabel="#{f.nome}"/>
+                    </p:selectOneMenu>
+
+
+                    <p:commandButton value="Salvar"
+                                     icon="ui-icon-disk"
+                                     actionListener="#{controleAutomovel.salvar()}"
+                                     update="formEdicao :formListagem"/>
+                </p:panelGrid>
+                
+                 <p:messages/>
+
+                <h:panelGroup id="painelFoto">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                                 layout="grid" styleClass="ui-panelgrid-blank"
+                                 rendered="#{controleAutomovel.editandoFoto}">
+                        <f:facet name="header">
+                            <p:outputLabel value="Edição de Fotos"/>
+                        </f:facet>             
+
+                        
+                        <p:fileUpload id="uploadImagem" mode="advanced"
+				update="messages" auto="true" label="Selecionar"
+                                fileUploadListener="#{controleAutomovel.enviarFoto}"
+				allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+			<h:outputLabel value="" />
+                        
+                       	<h:outputLabel value="" />
+                       
+                        
+
+                        <p:outputLabel value=""/>
+                        <p:commandButton value="Salvar Foto" icon="ui-icon-disk"
+                                         actionListener="#{controleAutomovel.salvarFoto()}"
+                                         id="btnAdicionarFoto"
+                                         process="btnAdicionarFoto "
+                                         update="@form"/>                                         
+                    </p:panelGrid>   
+                    <p:outputLabel value=""/>
+                </h:panelGroup>    
+
+            </div>
+
+
+
+            <h:panelGroup id="listagemFoto">
+                <h:panelGroup rendered="#{!controleAutomovel.editandoFoto}">
+                    <p:commandButton value="Nova Foto"
+                                     actionListener="#{controleAutomovel.novaFoto()}"
+                                     update="@form"
+                                     process="@this"/>
+                    <p:dataTable value="#{controleAutomovel.objeto.fotos}" var="fo"
+                                 reflow="true">
+                        <f:facet name="header">
+                            <p:outputLabel value="Fotos"/>
+                        </f:facet>
+                        <p:column headerText="Id">
+                            <p:outputLabel value="#{fo.id}"/>
+                        </p:column>
+                        <p:column headerText="Foto">
+                            <p:graphicImage value="#{controleAutomovel.imagemDinamica}"
+				style="width:60px;height:60px" cache="false">
+                                <f:param name="id_imagem" value="#{fo.automovel.id}"/>
+		        </p:graphicImage>
+                        </p:column>
+
+                        <p:column headerText="Ações">
+                            <div align="center">
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controleAutomovel.removerFoto(fo)}"
+                                                 process="@this" update="@form"/>                                                 
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:panelGroup>
+
+        </h:panelGroup>
+    </h:form>
+</html>
+
