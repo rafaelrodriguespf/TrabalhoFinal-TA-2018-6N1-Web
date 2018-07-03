@@ -22,10 +22,12 @@
                                              ajax="false"/>
                         </div>
                     </f:facet>
-                    <p:outputLabel value="Usuário" for="txtEmail"/>
-                    <p:inputText id="txtEmail" value="#{controleLogin.email}"/>
-                    <p:outputLabel value="Senha" for="txtPassword"/>
-                    <p:password id="txtPassword" value="#{controleLogin.password}"/>
+                    <p:outputLabel value="E-mail" for="txtEmail"/>
+                    <p:inputText id="txtEmail" value="#{controleLogin.email}" label="Email" validatorMessage="Formato de E-mail inválido">
+                        <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+                    </p:inputText>
+                    <p:outputLabel value="Senha" for="txtPassword" />
+                    <p:password id="txtPassword" value="#{controleLogin.password}" label="Senha"/>
                 </p:panelGrid>
             </h:form>
         </ui:define>

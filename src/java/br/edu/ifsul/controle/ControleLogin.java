@@ -39,7 +39,7 @@ public class ControleLogin implements Serializable {
             return "/index";
         } catch (Exception e) {
             e.printStackTrace();
-            Util.mensagemErro("Usuário ou senha inválidos! "
+            Util.mensagemErro("E-mail ou senha inválidos! "
                     + Util.getMensagemErro(e));
             return "/login";
         }
