@@ -24,7 +24,7 @@
                                     <p:outputLabel value="Ordem:" />
                                     <p:selectOneMenu value="#{controleAutomovel.dao.ordem}">  
                                         <f:selectItem itemLabel="ID" itemValue="id"/>   
-                                        <f:selectItem itemLabel="Nome" itemValue="nome"/>
+                                        <f:selectItem itemLabel="Nome" itemValue="modelo.nome"/>
                                         <f:selectItem itemLabel="Placa" itemValue="placa"/>                                     
                                         <p:ajax update="listagem"/>
                                     </p:selectOneMenu>

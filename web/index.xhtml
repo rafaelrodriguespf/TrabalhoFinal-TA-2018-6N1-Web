@@ -10,11 +10,56 @@
         <ui:define name="conteudo">
             <h:form id="formVeiculos">
                 <p:messages/>
-                <p:dataGrid var="car" value="#{controleAutomovel.dao.listaTodos}"
-                            columns="3" layout="grid" paginator="true"
-                            rows="6" >
+                <p:dataGrid var="car" id="listagem" value="#{controleAutomovel.dao.listaObjetos}"
+                            columns="3" layout="grid"
+                            >
+                      <f:facet name="header">                            
+                            <div class="ui-fluid" >
+                                <p:panelGrid columns="7" styleClass="ui-panelgrid-blank" layout="grid"
+                                             columnClasses="col-md-1,col-md-2,col-md-1,col-md-3,col-md-2,col-md-2,col-md-1">
+                                    <p:outputLabel value="Ordem:" />
+                                    <p:selectOneMenu value="#{controleAutomovel.dao.ordem}">  
+                                        <f:selectItem itemLabel="ID" itemValue="id"/>   
+                                        <f:selectItem itemLabel="Modelo" itemValue="modelo.nome"/>
+                                        <f:selectItem itemLabel="Marca" itemValue="modelo.marca.nome"/>
+                                        <f:selectItem itemLabel="Placa" itemValue="placa"/>                                     
+                                        <p:ajax update="listagem"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="Filtro: "/>
+                                    <p:inputText value="#{controleAutomovel.dao.filtro}"/>                                                            
+                                    <p:commandButton value="Filtrar" update="listagem" icon="ui-icon-search"/>
+                                    <p:outputLabel value="Máximo de objetos:"/>
+                                    <p:inputNumber value="#{controleAutomovel.dao.maximoObjetos}" size="3"
+                                                   thousandSeparator="" decimalSeparator="" decimalPlaces="0">
+                                        <p:ajax event="blur" update="listagem"/> 
+                                    </p:inputNumber>
+                                </p:panelGrid>
+                            </div>                                            
+                        </f:facet>
+                        <f:facet name="footer"> 
+                            <p:outputLabel value="#{controleAutomovel.dao.mensagemNavegacao} &nbsp; &nbsp;"/>
+                            <p:commandButton action="#{controleAutomovel.dao.primeiro()}"
+                                             icon="ui-icon-seek-first" title="Primeiro" update="listagem"/>
+                            <p:commandButton action="#{controleAutomovel.dao.anterior()}"
+                                             icon="ui-icon-seek-prev" title="Anterior" update="listagem"/>
+                            <p:commandButton action="#{controleAutomovel.dao.proximo()}"
+                                             icon="ui-icon-seek-next" title="Próximo" update="listagem"/>
+                            <p:commandButton action="#{controleAutomovel.dao.ultimo()}"
+                                             icon="ui-icon-seek-end" title="Ultimo" update="listagem"/>                                                        
+                        </f:facet>
+
                     <p:panel header="#{car.modelo.nome}" style="text-align:center">
                         <h:panelGrid columns="1" style="width:100%">
+                            <f:facet name="header" >
+                             
+                                <p:graphicImage  >
+                                    
+                                    <p:graphicImage value="#{controleAutomovel.imagemDinamica}"
+                                                    style="width:100%;"  cache="false" >
+                                        <f:param name="id_imagem" value="#{car.id}"/>
+                                    </p:graphicImage>
+                                </p:graphicImage>
+                            </f:facet>
                             <p:outputLabel value="Marca: #{car.modelo.marca.nome}"/>
                             <p:outputLabel value="Valor: #{car.valor}">
                                 <f:convertNumber pattern="R$ 0.00"/>
@@ -33,20 +78,20 @@
                         </h:panelGrid>
                     </p:panel> 
                 </p:dataGrid>
-                
-                <p:dialog header="Foto" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:outputPanel id="carDetail" style="text-align:center;">
+
+                <p:dialog header="Foto" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" responsive="true">
+                    <p:outputPanel id="carDetail" style="text-align:center;"  >
                         <p:panelGrid  columns="2" rendered="#{not empty controleAutomovel.objeto}" columnClasses="label,value">
-                            
+
                             <f:facet name="header">
                                 <p:graphicImage value="#{controleAutomovel.imagemDinamica}"
-				style="width:800px;height:600px" cache="false">
+                                                style="width:100%" cache="false">
                                     <f:param name="id_imagem" value="#{controleAutomovel.objeto.id}"/>
                                 </p:graphicImage>
                             </f:facet>
 
-                           
-                           
+
+
                         </p:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
